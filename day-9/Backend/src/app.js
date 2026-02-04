@@ -3,9 +3,15 @@
 const express = require("express")
 const noteModel = require("./models/note.model")
 const cors = require("cors")
+const path = require("path")
+const { log } = require("console")
+
 const app = express()
 app.use(cors())
 app.use(express.json())
+app.use(express.static(path.join(__dirname,"..", "public")))
+
+
 
 // POST /api/notes
 // - create new note and save data in mongodb
@@ -65,4 +71,13 @@ app.patch("/api/notes/:id", async (req,res) => {
         message:"note description updated successfully"
     })
 })
+
+console.log(__dirname)
+
+// wildcard route
+// frontend fallback — EXPRESS 5 SAFE
+app.use((req, res) => {
+  res.sendFile(path.join(__dirname, "..", "public", "index.html"))
+})
+
 module.exports = app
